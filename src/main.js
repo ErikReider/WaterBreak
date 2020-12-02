@@ -7,9 +7,6 @@ var force_quit = false;
 
 /**@type {BrowserWindow} */
 let overlayWindow;
-/**@type {BrowserWindow} */
-let settingsWindow;
-
 function createOverlayWindow() {
     if (overlayWindow !== undefined && !overlayWindow.isVisible()) {
         overlayWindow.show();
@@ -22,8 +19,8 @@ function createOverlayWindow() {
             nodeIntegration: true,
         },
         show: false,
-        alwaysOnTop: true,
-        kiosk: true,
+        alwaysOnTop: prod ? true : false,
+        kiosk: prod ? true : false,
         autoHideMenuBar: true,
         closable: false,
         frame: false,
@@ -32,7 +29,7 @@ function createOverlayWindow() {
         hasShadow: false,
     });
 
-    overlayWindow.loadFile('./src/settings/settings.html');
+    overlayWindow.loadFile('./src/overlay/overlay.html');
     overlayWindow.once('ready-to-show', () => { overlayWindow.show(); overlayWindow.focus(); });
     overlayWindow.on('close', (e) => {
         if (!force_quit) {
@@ -40,11 +37,20 @@ function createOverlayWindow() {
             overlayWindow.hide();
         }
     });
+
+    overlayWindow.webContents.on("before-input-event", (event, input) => {
+        // if (input.code != "Escape") {
+        //     event.preventDefault();
+        // } else {
+        //     overlayWindow.hide();
+        // }
+    });
 }
 
+/**@type {BrowserWindow} */
+let settingsWindow;
 function createSettingsWindow() {
     if (settingsWindow !== undefined && !settingsWindow.isVisible()) {
-        console.log("eue")
         settingsWindow.show();
         return;
     }
