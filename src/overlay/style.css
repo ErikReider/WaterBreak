@@ -1,0 +1,53 @@
+html {
+  padding: 0;
+  margin: 0;
+}
+html .far {
+  font-family: "fontawesome";
+}
+html body {
+  padding: 50px 10px;
+  margin: 0;
+  background-color: transparent;
+  overflow: hidden;
+  height: 100vh;
+  color: #ffffff;
+  transition: opacity 0.3s ease-in-out;
+}
+html body #timeSpan {
+  display: block;
+  height: 22px;
+}
+html body #snoozeButton {
+  user-select: none;
+  cursor: pointer;
+  display: inline-block;
+  padding: 8px 16px;
+  margin: 12px;
+}
+html body #snoozeButton:hover {
+  opacity: 0.8;
+}
+html body .progressBar {
+  margin: 20px auto;
+  display: block;
+  height: 4px;
+  background-color: white;
+  width: 100%;
+  max-width: 500px;
+}
+html body .progressBar div {
+  display: block;
+  background-color: #0000ff;
+  height: 100%;
+}
+html body #GifContainer {
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+  max-height: 400px;
+  max-width: 700px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}

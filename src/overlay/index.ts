@@ -1,33 +1,36 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const functions_1 = __importDefault(require("../functions/functions"));
-let gifContainer;
-let progressBar;
-let timeSpan;
-let snoozeButton;
+import Functions from "../functions/functions";
+
+let gifContainer: HTMLDivElement;
+let progressBar: HTMLProgressElement;
+let timeSpan: HTMLSpanElement;
+let snoozeButton: HTMLDivElement;
+
 let prod = true;
+
 onload = async () => {
-    prod = await functions_1.default.getSetting("prod");
-    gifContainer = document.getElementById("GifContainer");
-    progressBar = document.getElementById("progressBar");
-    timeSpan = document.getElementById("timeSpan");
-    snoozeButton = document.getElementById("snoozeButton");
-    if (await functions_1.default.getSetting("showGif")) {
+    prod = <boolean>await Functions.getSetting("prod");
+
+    gifContainer = <HTMLDivElement>document.getElementById("GifContainer");
+    progressBar = <HTMLProgressElement>document.getElementById("progressBar");
+    timeSpan = <HTMLSpanElement>document.getElementById("timeSpan");
+    snoozeButton = <HTMLDivElement>document.getElementById("snoozeButton");
+
+    if (<boolean>await Functions.getSetting("showGif")) {
         await gifInit();
-    }
-    else {
+    } else {
         gifContainer.style.display = "none";
     }
+
     snoozeButton.onclick = (() => window.close());
-    const time = (await functions_1.default.getSetting("timeout")).split(" ");
+    const time = (<string>await Functions.getSetting("timeout")).split(" ");
     let timeout = Number(time[0]);
     timeout = time[1] == "sec" ? timeout : (time[1] == "min" ? timeout * 60 : 0);
+
     initProgressBar(() => prod ? window.close() : "", timeout, time[1]);
+
     document.body.style.opacity = "1";
 };
+
 async function gifInit() {
     const ref = "https://api.giphy.com/v1/gifs/search?api_key=";
     const apiKey = "3eFQvabDx69SMoOemSPiYfh9FY0nzO9x";
@@ -35,14 +38,17 @@ async function gifInit() {
     const limit = 1;
     const offset = Math.floor(Math.random() * 20);
     const url = ref + apiKey + "&q=" + query.split(" ").join("-") + "&offset=" + offset + "&limit=" + limit;
-    const gifList = (await (await fetch(url)).json())["data"].map((data) => data["images"]["original"]["url"]);
+
+    const gifList = (await (await fetch(url)).json())["data"].map((data: { images: { original: { url: string } } }) => data["images"]["original"]["url"]);
     const gif = gifList[Math.floor(Math.random() * gifList.length)];
+
     gifContainer.style.backgroundImage = "url(" + gif + ")";
 }
-function initProgressBar(callback, seconds, suffix) {
+
+type Callback = () => void;
+function initProgressBar(callback: Callback, seconds: number, suffix: string) {
     if (seconds === 0) {
-        if (progressBar.parentElement)
-            progressBar.parentElement.style.display = "none";
+        if (progressBar.parentElement) progressBar.parentElement.style.display = "none";
         return;
     }
     const interval = 10;

@@ -1,1 +1,8 @@
-@background-color: rgb(39, 39, 39);
+@background-color: #272727;
+@is-bg-dark: boolean(luma(@background-color) > 50%);
+@text-color: if(@is-bg-dark, #000000, #ffffff);
+
+@progress-bg: if(@is-bg-dark, black, white);
+@progress-color: #0000ff;
+
+@button-bg: #ff0000;
